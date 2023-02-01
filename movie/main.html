@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>간편 영화 후기</title>
+   
+    <link rel = 'stylesheet' href = './main.css'/>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
+
+</head>
+<body>
+
+
+    
+
+
+    <nav class="navbar-dark bg-dark">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="#">
+            <img src="https://images.unsplash.com/photo-1674582037808-7ca33039f3a8?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1175&q=80" alt="Logo" width="30" height="24" class="d-inline-block align-text-top">
+            간편 영화 후기
+          </a>
+        </div>
+      </nav>
+
+
+      <div class="container" id = "container">
+        
+        <div id = "jumbotron">
+
+        <h1 class="display-4">인기/최신 영화에 한마디씩!</h1>
+	  <p class="lead">This is  a jumbotron created using the bootstrap 5</p>
+	  <hr class="my-4">
+	  <p>It uses utility classes for typography and spacing to space content out within the larger container.</p>
+	  <a class="btn btn-danger btn-lg" href="#" role="button">Learn more</a>
+        </div>
+
+        
+    <div class="row row-cols-1 row-cols-md-3 g-4" id = "movie-list">
+        <div class="col">
+          <div class="card">
+            <img src="..." class="card-img-top" alt="...">
+            <div class="card-body">
+              <h5 class="card-title">Card title</h5>
+              <button type="button" class="btn btn-success" id = 'review-button' onclick = "review()">리뷰보기</button>
+            </div>
+          </div>
+        </div>
+        
+      </div>
+
+    </div>
+    
+
+    <div class="modal" id = "review-modal" tabindex="-1">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">후기</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <p>Modal body text goes here.</p>
+            </div>
+            <div class="modal-footer">
+              <input type = "text" class = "form-control" id = 'review" style = "width:70%'/>
+              <button type="button" class="btn btn-primary" onclick="addReview()">후기쓰기</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+
+    <script>
+
+
+    $(document).ready(function(){
+
+    $.ajax({
+    url :  'https://api.themoviedb.org/3/movie/popular?api_key=10923b261ba94d897ac6b81148314a3f&page=1',
+    data : {"key" : "value"},
+    type:"POST",
+    //가져오는방식
+    //POST는 data키와 value로 가져옴
+    success:function(json){
+        console.log(json)
+        
+        $("#movie-list").html('');
+        
+        let movie_list = json.results;
+        //json은 객체임
+        //성공했을때
+
+        
+        //첫번째 거 비움
+        
+        for(let i=0; i<movie_list.length; i++){
+
+        let card = `<div class="col">
+          <div class="card">
+            <img src="${"https://image.tmdb.org/t/p/w500/"+movie_list[i].poster_path}" class="card-img-top" alt="...">
+            <div class="card-body">
+              <h5 class="card-title">${movie_list[i].original_title}</h5>
+              <button type="button" class="btn btn-success" id = 'review-button' onclick = "review(${movie_list[i].id})">리뷰보기</button>
+            </div>
+          </div>
+        </div>
+        `
+
+
+        $("#movie-list").append(card);
+        }
+    },
+    error:function(err){
+
+        //실패했을대
+    }
+
+    })
+
+    })
+
+
+
+        function review(id){
+           
+            $.ajax({
+                url : `http://universeapi.net/review/list?movie_id=${id}`,
+                data :{},
+                type : "GET",
+                success : function(json){
+                  console.log("hi")
+                    console.log(json.data);
+
+                  let reviews = json.data;
+
+                    for(let i=0; i<reviews.length; i++){
+
+
+                    }
+                    
+                },
+                error: function(){
+                  }
+            })
+        
+            
+            $('#review-modal').modal('show')    
+        }
+
+    </script>
+
+
+</body>
+</html>
